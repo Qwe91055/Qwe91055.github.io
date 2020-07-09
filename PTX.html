@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <title>台中市公車動態資訊</title>
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+
+    <link rel="stylesheet" href="L.Control.Sidebar.css" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="vendors/linericon/style.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendors/bootstrap-datepicker/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
+    <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+    <!-- main css -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="sha.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
+    <style>
+        .container {
+            border: 2px solid #FED18C;
+            width: 200px;
+        }
+        
+        .menu {
+            list-style-type: none;
+            margin: 0px;
+            padding: 0px;
+        }
+        
+        li {
+            line-height: 1.5em;
+            padding-left: 0.8em;
+            border-width: 1px;
+            border-left: 8px solid #fff;
+        }
+        
+        li>a {
+            padding-left: 5px;
+        }
+        
+        li:hover {
+            border-left: 8px solid #FED18C;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="mapid" style="width: 100%; height: 100vh;"></div>
+
+
+
+
+
+    <div id="sidebar" style="width: 100%; height: 100vh;">
+        <div>
+            <span class="image main"><img src="images\9018.jpg" style="width: 100%; height: 20vh;" alt="" /></span></div>
+        </br>
+        </br>
+        <div>
+            <input onclick='show(this, "go"),sho(this,"back"),val(0)' type="radio" name="gr" value="0">去程</input>
+            <input onclick='show(this, "back"),sho(this,"go"),val(1)' type="radio" name="gr" value="1">返程</input>
+            <button type="button" onclick="sidebar.hide();">關閉</button>
+            <a href="index.html"><button type="button" >返回主頁
+            </button></a>
+
+
+        </div>
+
+        </br>
+        </br>
+        <div class="col-md-12">
+            </br>
+            <h1 class="title title_color" style="text-align:center">9018時刻表</h1>
+            <hr style="border: 2px solid #FED18C">
+            </br>
+
+        </div>
+        <div class="container" style="width: 100%;height: 38vh;">
+            <div id='go' style="display:none;" class="col-md-4">
+
+                <ul class="menu">
+                    <li>
+                        <h3><i></i>
+                            <a>去程</a></h3>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a href="#">06:40</a>
+
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a href="#">06:40</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>07:20</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>07:40</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>08:00</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>08:20</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>09:00</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>10:00</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>11:00</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>12:00</a>
+                    </li>
+
+
+                </ul>
+
+            </div>
+            <div id='back' style="display:none;" class="col-md-4">
+                <ul class="menu">
+                    <li>
+                        <h3><i></i>
+                            <a>返程</a></h3>
+
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a href="#">06:40</a>
+
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a href="#">06:40</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>07:20</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>07:40</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>08:00</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>08:20</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>09:00</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>10:00</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>11:00</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-street-view"></i>
+                        <a>12:00</a>
+                    </li>
+
+
+                </ul>
+
+            </div>
+
+        </div>
+
+        <div class="container" style="width: 100%;height: 40vh;">
+            </br>
+            <div class="col-md-12">
+                <form class="row contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="a1" name="name" placeholder="姓名">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="a2" name="email" placeholder=" 手機號碼">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="a3" name="email" placeholder="成人人數">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="a4" name="subject" placeholder="安全座椅數">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="a5" name="subject" placeholder="出發站(台中OR鹿港">
+
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="a6" name="subject" placeholder="預計出發日期">
+
+                        </div>
+                        <div class="form-group">
+
+                            <input type="text" class="form-control" id="a7" name="subject" placeholder="預計出發班次">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="a8" name="subject" placeholder=" 預計返程日期">
+
+                        </div>
+                        <div class="form-group">
+
+                            <input type="text" class="form-control" id="a9" name="subject" placeholder=" 預計返程班次">
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+
+                            <input type="text" class="form-control" id="a10" name="subject" placeholder="其他需求">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button> -->
+                        <h1> <button type="button" class="btn btn-primary" data-dismiss="modal" id="b" onclick='show(this, "oo")'>送出</button>
+                        </h1>
+                    </div>
+                    <div id='oo' style="display:none;">
+                        <h1 style="color: red;">以預約成功</h1>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button> -->
+                        <h1> <button type="button" class="btn btn-primary" data-dismiss="modal"><a href="PTX.html"style="color:white;">繼續查詢</a></button>
+                        </h1>
+                    </div>
+
+            </div>
+
+        </div>
+
+        <!-- Modal -->
+    </div>
+    <script>
+        $(function() {
+            var $a1 = $('#a1'),
+                $a2 = $('#a2'),
+                $a3 = $('#a3'),
+                $a3 = $('#a4'),
+                $a3 = $('#a5'),
+                $a3 = $('#a6'),
+                $a3 = $('#a7'),
+                $a3 = $('#a8'),
+                $a3 = $('#a9'),
+                $b = $('#b'),
+                a = {};
+
+            $b.on('click', function() {
+                a = {
+                    data: $a1.val() + ',' + $a2.val() + ',' + $a3.val() + ',' + $a4.val() + ',' + $a5.val() + ',' + $a6.val() + ',' + $a7.val() + ',' + $a8.val() + ',' + $a9.val(),
+                    sheetUrl: 'https://docs.google.com/spreadsheets/d/1NMaGRm0Kc_MXW-apcf57FINGRlBW9goqvkwtPF_lDQQ/edit?usp=sharing',
+                    sheetTag: '工作表1'
+                };
+                console.log(a);
+                $.get('https://script.google.com/macros/s/AKfycbyIuqycbzfHIfmBD7YKxYs_UMtMy6hLep01cUVv4ryEfRGyet3e/exec', a);
+            });
+        });
+    </script>
+
+
+    <script type='text/javascript'>
+        function show(obj, id) {
+            var o = document.getElementById(id);
+            if (o.style.display == 'none') {
+                o.style.display = '';
+                obj.innerHTML = '隱藏';
+            } else {
+
+            }
+        }
+    </script>
+    <script type='text/javascript'>
+        function sho(obj, id) {
+            var o = document.getElementById(id);
+            if (o.style.display == '') {
+                o.style.display = 'none';
+                obj.innerHTML = '顯示';
+            } else {
+
+            }
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="L.Control.Sidebar.js"></script>
+
+
+
+    <script src="app.js"></script>
+
+
+
+    <script>
+        var sidebar = L.control.sidebar('sidebar', {
+
+            position: 'left'
+
+        });
+
+
+
+        mymap.addControl(sidebar);
+
+        /*
+
+            setTimeout(function () {
+
+            sidebar.show();
+
+        }, 3000);*/
+
+
+
+        var marker = L.marker([24.144596, 120.672539]).addTo(mymap).on('click', function() {
+
+            sidebar.toggle();
+
+        });
+    </script>
+
+
+
+    <script type="text/javascript" src="latlon.json"></script>
+
+
+
+    <script>
+        var mydata = JSON.parse(data);
+
+
+
+        console.log(mydata)
+
+        var temp = [];
+
+        for (var i = 0; i < mydata.length; i++)
+
+        {
+
+            if (i == 0) temp.push(mydata[i]);
+
+            else
+
+            {
+
+                if (GetDistance(mydata[i][0], mydata[i][1], mydata[i - 1][0], mydata[i - 1][1]) > 10)
+
+                {
+
+                    var polyline = L.polyline(temp, {
+                        color: 'red'
+                    }).addTo(mymap);
+
+                    mymap.fitBounds(polyline.getBounds());
+
+                    temp = [];
+
+                } else
+
+                {
+
+                    temp.push(mydata[i]);
+
+                }
+
+
+
+            }
+
+        }
+
+        var polyline = L.polyline(temp, {
+            color: 'red'
+        }).addTo(mymap);
+
+        mymap.fitBounds(polyline.getBounds());
+
+        function GetDistance(lat1, lng1, lat2, lng2) {
+
+            var radLat1 = lat1 * Math.PI / 180.0;
+
+            var radLat2 = lat2 * Math.PI / 180.0;
+
+            var a = radLat1 - radLat2;
+
+            var b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0;
+
+            var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
+
+                Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+
+            s = s * 6378.137; // EARTH_RADIUS;
+
+            s = Math.round(s * 10000) / 10000;
+
+            return s;
+
+        }
+
+
+
+        //}
+    </script>
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlKWP4uWjQIR3WDAWLAu6rUhBfc3_ppag&callback=initMap" async defer></script>
+
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="js/jquery.ajaxchimp.min.js"></script>
+    <script src="vendors/bootstrap-datepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="vendors/nice-select/js/jquery.nice-select.js"></script>
+    <script src="js/mail-script.js"></script>
+    <script src="js/stellar.js"></script>
+    <script src="vendors/lightbox/simpleLightbox.min.js"></script>
+    <script src="js/custom.js"></script>
+
+
+
+
+
+
+</body>
+
+</html>
